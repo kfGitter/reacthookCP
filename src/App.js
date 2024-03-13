@@ -1,6 +1,7 @@
-// App.js
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import MovieList from './MovieList';
+import MovieDetails from './MovieDetails'; 
 import Filter from './Filter';
 import './movie.css';
 
@@ -39,23 +40,30 @@ const App = () => {
     })
     .sort((a, b) => a.rating - b.rating);
 
-
+  // routing happens here
   return (
-    <div className="app">
-      <Filter
-        filterTitle={filterTitle}
-        filterRate={filterRate}
-        handleTitleChange={handleTitleChange}
-        handleRateChange={handleRateChange}
-      />
-      <MovieList movies={filteredMovies} />      <form onSubmit={handleAddMovie}>
-        <input type="text" name="title" placeholder="Title" value={newMovie.title} onChange={handleInputChange} />
-        <input type="text" name="description" placeholder="Description" value={newMovie.description} onChange={handleInputChange} />
-        <input type="url" name="posterURL" placeholder="Poster URL" value={newMovie.posterURL} onChange={handleInputChange} />
-        <input type="number" name="rating" placeholder="Rating" value={newMovie.rating} onChange={handleInputChange} />
-        <button type="submit">Add Movie</button>
-      </form>
-    </div>
+    <Router>
+      <div className="app">
+        <Switch>
+          <Route exact path="/">
+            <Filter
+              filterTitle={filterTitle}
+              filterRate={filterRate}
+              handleTitleChange={handleTitleChange}
+              handleRateChange={handleRateChange}
+            />
+            <MovieList movies={filteredMovies} />      <form onSubmit={handleAddMovie}>
+              <input type="text" name="title" placeholder="Title" value={newMovie.title} onChange={handleInputChange} />
+              <input type="text" name="description" placeholder="Description" value={newMovie.description} onChange={handleInputChange} />
+              <input type="url" name="posterURL" placeholder="Poster URL" value={newMovie.posterURL} onChange={handleInputChange} />
+              <input type="number" name="rating" placeholder="Rating" value={newMovie.rating} onChange={handleInputChange} />
+              <button type="submit">Add Movie</button>
+            </form>
+          </Route>
+          <Route path="/movie/:id" render={(props) => <MovieDetails {...props} movies={movies} />} />
+        </Switch>
+      </div>
+    </Router>
   );
 };
 
